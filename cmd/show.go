@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/spf13/cobra"
 )
 
@@ -18,7 +17,7 @@ var showCmd = &cobra.Command{
 	Use:   "show",
 	Short: "A brief description of your command",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("show called: optint: %d, optstr: %s", o.optint, o.optstr)
+		cmd.Printf("show called: optint: %d, optstr: %s", o.optint, o.optstr)
 	},
 }
 
