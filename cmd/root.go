@@ -11,25 +11,31 @@ import (
 
 var cfgFile string
 
-var RootCmd = &cobra.Command{
-	Use:   "cmd-test",
-	Short: "A brief description of your application",
+func NewCmdRoot() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "cmd-test",
+		Short: "A brief description of your application",
+	}
+	cobra.OnInitialize(initConfig)
+
+	cmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cmd-test.yaml)")
+	cmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+
+	cmd.AddCommand(NewCmdShow())
+	return cmd
 }
 
 func Execute() {
-	RootCmd.SetOutput(os.Stdout)
-	if err := RootCmd.Execute(); err != nil {
-		RootCmd.SetOutput(os.Stderr)
-		RootCmd.Println(err)
+	cmd := NewCmdRoot()
+	cmd.SetOutput(os.Stdout)
+	if err := cmd.Execute(); err != nil {
+		cmd.SetOutput(os.Stderr)
+		cmd.Println(err)
 		os.Exit(1)
 	}
 }
 
 func init() {
-	cobra.OnInitialize(initConfig)
-
-	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cmd-test.yaml)")
-	RootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 func initConfig() {
